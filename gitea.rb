@@ -28,7 +28,8 @@ class Gitea < Formula
   end
 
   def install
-    if build.head?
+    case
+    when build.head?
       mkdir_p buildpath/File.join("src", "code.gitea.io")
       ln_s buildpath, buildpath/File.join("src", "code.gitea.io", "gitea")
 
@@ -41,8 +42,10 @@ class Gitea < Formula
       system("make", "build")
 
       bin.install "#{buildpath}/bin/gitea" => "gitea"
-    else
+    when build.devel?
       bin.install "#{buildpath}/gitea-master-darwin-amd64" => "gitea"
+    else
+      bin.install "#{buildpath}/gitea-1.0.0-darwin-amd64" => "gitea"
     end
   end
 end
